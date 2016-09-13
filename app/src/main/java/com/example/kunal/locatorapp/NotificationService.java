@@ -36,12 +36,6 @@ public class NotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(getApplicationContext(),"App running in background",Toast.LENGTH_SHORT).show();
 
-        NotificationCompat.Builder builder= new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setContentTitle("Locator App");
-        builder.setContentText("Tap to close the service");
-
-
         return START_STICKY;
     }
 

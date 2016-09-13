@@ -37,5 +37,27 @@
         android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_below="@+id/submitBtn"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="45dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:text="Location"/>
+    <TextView
+        android:id="@+id/text_view_loc"
+        android:layout_toRightOf="@+id/text_view"
+        android:layout_below="@+id/submitBtn"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="45dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:text=""/>
 </RelativeLayout>
 </LinearLayout>
