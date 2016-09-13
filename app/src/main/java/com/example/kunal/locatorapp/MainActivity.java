@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public double locationLongitude;
 
     public double distance;
+    Boolean notificationSent= false;
 
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -64,8 +65,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Toast toast = Toast.makeText(this, "Permission for location access not given", Toast.LENGTH_SHORT);
             toast.show();
         } else {
-            lom.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            lom.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            lom.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*2, 0, this);
+//            lom.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000*2, 0, this);
         }
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     inputLocation=locationEditText.getText().toString();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("We will notify when " + inputLocation + " is in 1 KM range \n\nMake sure your Gps is enabled");
+                    builder.setMessage("We will notify when " + inputLocation + " is in \n1 KM range \n\nMake sure your Gps is enabled");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -90,9 +91,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             minimizeApp();
 
                             distance=getDistanceFromLatLonInKm(userLatitude,userLongitude,locationLatitude,locationLongitude);
-                            Log.d("kunal",String.valueOf(distance));
+                            Log.d("kunal", String.valueOf(distance));
 
-                            checkForNotification(distance);
+                            checkForNotification(distance,inputLocation);
 
 
                         }
@@ -121,6 +122,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         double longitude=location.getLongitude();
         userLatitude=latitude;
         userLongitude=longitude;
+
+        distance=getDistanceFromLatLonInKm(userLatitude,userLongitude,locationLatitude,locationLongitude);
+        Log.d("kunal",String.valueOf(distance));
+
+        checkForNotification(distance,inputLocation);
 
     }
 
@@ -177,12 +183,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         startActivity(startMain);
     }
 
-    public void checkForNotification(double distance){
-        if(distance<=1.00){
+    public void checkForNotification(double distance,String inputLocation){
+        if(distance<=1.00 && notificationSent==false){
             NotificationCompat.Builder builder= new NotificationCompat.Builder(getApplicationContext());
             builder.setSmallIcon(R.mipmap.ic_launcher);
             builder.setContentTitle("Yippee!!");
-            builder.setContentText("Your destination is within 1 KM");
+            builder.setContentText("Within 1 KM of " + inputLocation );
 
             Notification notification = builder.build();
             NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -190,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             notification.defaults |= Notification.DEFAULT_SOUND;
 
             nm.notify(1,notification);
+            notificationSent=true;
         }
     }
 
